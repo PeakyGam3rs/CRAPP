@@ -1,6 +1,6 @@
 package com.svgs.framework.reader;
 
-import com.svgs.framework.data.SaveManager;
+//import com.svgs.framework.data.SaveManager;
 
 public class Poller {
     public static Thread poller;
@@ -13,7 +13,7 @@ public class Poller {
                
                 try {
                     Thread.sleep(200);
-                    SaveManager.recordValues();
+                    //SaveManager.recordValues();
                 } catch (Exception e) {
                     break;
                 }

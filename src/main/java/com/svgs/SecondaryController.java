@@ -17,9 +17,6 @@ public class SecondaryController {
   @FXML
   private ListView<String> parList;
 
-
-  
-
   private static final ObservableList<String> names = FXCollections.observableArrayList(
       PreferenceRegistry.getPreferenceTitles());
 

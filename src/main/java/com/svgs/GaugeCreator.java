@@ -11,7 +11,7 @@ public class GaugeCreator {
         Preference p = PreferenceRegistry.getPreference(gaugeValue);
         
         GaugeBuilder b = GaugeBuilder.create();
-
+        
         b.skinType(p.getSkinType());
         b.title(p.getTitle());
         b.unit(p.getUnit());

@@ -1,7 +1,6 @@
 package com.svgs;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.svgs.framework.reader.Poller;
 
@@ -9,8 +8,8 @@ import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.Gauge.SkinType;
 import eu.hansolo.medusa.GaugeBuilder;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML; // tried an animation thing for the gauges, didn't work, might try again
-import javafx.scene.control.Button;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button; // tried an animation thing for the gauges, didn't work, might try again
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -28,7 +27,7 @@ public class PrimaryController {
 
     @FXML
     private Button saveButton;
-    
+
     void makeGauge(ActionEvent event) {
         Gauge gauge = GaugeBuilder.create()
                 .skinType(SkinType.BULLET_CHART) // Choose a skin type (e.g., LEVEL, MODERN, AMP, etc.)
@@ -42,6 +41,7 @@ public class PrimaryController {
                 .build();
         vbux.getChildren().add(gauge);
     } // sort of a reference rn
+    
     @FXML
     void addGaugeScreen(ActionEvent event) throws IOException {
         App.setRoot("gaugeList");
@@ -56,7 +56,7 @@ public class PrimaryController {
     void goToSaves(ActionEvent event) throws IOException {
         App.setRoot("saveView");
     }
-
+/* 
     public void decider() {
 
         Gauge gauge;
@@ -191,4 +191,5 @@ public class PrimaryController {
             }
         }
     }
-}
+*/
+    }

@@ -10,4 +10,6 @@ public class GaugeList {
     public static void addGauge(Gauge g) {
         list.add(g);
     }
+
+    
 }

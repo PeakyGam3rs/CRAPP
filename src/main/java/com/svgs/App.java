@@ -2,6 +2,8 @@ package com.svgs;
 
 import java.io.IOException;
 
+import com.svgs.framework.data.SaveManager;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

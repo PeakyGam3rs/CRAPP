@@ -5,6 +5,7 @@ module com.svgs {
     requires eu.hansolo.medusa;
     requires com.fazecast.jSerialComm;
     requires eu.hansolo.fx.charts;
+    requires javafx.graphics;
     
     opens com.svgs to javafx.fxml;
     exports com.svgs;

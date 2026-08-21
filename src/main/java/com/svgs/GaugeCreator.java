@@ -10,7 +10,7 @@ public class GaugeCreator {
         String gaugeValue = PreferenceRegistry.getValueTitle(gaugeTitle);
         Preference p = PreferenceRegistry.getPreference(gaugeValue);
         
-        GaugeBuilder b = GaugeBuilder.create();
+        GaugeBuilder<?> b = GaugeBuilder.create();
         
         b.skinType(p.getSkinType());
         b.title(p.getTitle());

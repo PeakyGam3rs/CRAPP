@@ -40,7 +40,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
-public class SaveViewer{
+public class SaveViewer {
     private static final DateTimeFormatter timeStuff = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     FileChooser fileChooser = new FileChooser();
@@ -67,8 +67,10 @@ public class SaveViewer{
     private VBox metricOptions;
 
     /**
-     * Works out which CSV column holds a metric by asking DataRegistry where it sits.
-     * getValueReadout writes the row in that same order, so the two can't drift apart
+     * Works out which CSV column holds a metric by asking DataRegistry where it
+     * sits.
+     * getValueReadout writes the row in that same order, so the two can't drift
+     * apart
      * the way a hardcoded column list did.
      */
     private static int columnFor(String valueTitle) {
@@ -99,7 +101,7 @@ public class SaveViewer{
 
     @FXML
     void pickSave(ActionEvent event) {
-        fileChooser.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("CSV Files","*.csv"));
+        fileChooser.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
         fileChooser.setTitle("Select a Save.");
         File saveFolder = saveDir.toFile();
         if (saveFolder.exists()) {
@@ -108,7 +110,9 @@ public class SaveViewer{
 
         File selected = fileChooser.showOpenDialog(App.scene.getWindow());
 
-        if(selected == null){return;}
+        if (selected == null) {
+            return;
+        }
 
         selectedFile = selected;
         saveSelector.setText(selectedFile.getName());
@@ -135,13 +139,12 @@ public class SaveViewer{
         String label = PreferenceRegistry.getPreference(valueTitle).getTitle();
         List<XYChartItem> items = readChartItems(csvFile, columnFor(valueTitle));
         XYSeries<XYChartItem> series = new XYSeries<>(
-            items,
-            ChartType.LINE,
-            label,
-            Color.web("#31a6ff"),
-            Color.web("#31a6ff"),
-            false
-        );
+                items,
+                ChartType.LINE,
+                label,
+                Color.web("#31a6ff"),
+                Color.web("#31a6ff"),
+                false);
 
         double maxX = items.isEmpty() ? 1 : items.get(items.size() - 1).getX();
         double minY = items.stream().mapToDouble(XYChartItem::getY).min().orElse(0);
@@ -151,7 +154,8 @@ public class SaveViewer{
             maxY += 1;
         }
 
-        Axis xAxis = new Axis(0, Math.max(maxX, 1), Orientation.HORIZONTAL, AxisType.LINEAR, Position.BOTTOM, "Time (seconds)");
+        Axis xAxis = new Axis(0, Math.max(maxX, 1), Orientation.HORIZONTAL, AxisType.LINEAR, Position.BOTTOM,
+                "Time (seconds)");
         Axis yAxis = new Axis(minY, maxY, Orientation.VERTICAL, AxisType.LINEAR, Position.LEFT, label);
         xAxis.setAutoScale(true);
         yAxis.setAutoScale(true);
@@ -184,7 +188,8 @@ public class SaveViewer{
 
                 double elapsedSeconds = (timeMillis - firstTime) / 1000.0;
                 double value = Double.parseDouble(parts[columnIndex].trim());
-                LocalDateTime timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(timeMillis), ZoneId.systemDefault());
+                LocalDateTime timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(timeMillis),
+                        ZoneId.systemDefault());
                 items.add(new XYChartItem(elapsedSeconds, value, timestamp.format(timeStuff)));
             }
         }
@@ -193,7 +198,7 @@ public class SaveViewer{
     }
 
     @FXML
-    void leave(ActionEvent event) throws IOException{
+    void leave(ActionEvent event) throws IOException {
         App.setRoot("mainScreen");
     }
 }

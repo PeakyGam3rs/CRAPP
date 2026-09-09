@@ -37,7 +37,8 @@ public class GaugeCreator {
         Gauge gauge = b.build();
 
         // the gauge follows the property from here on. DataProperty.writeValue sets
-        // this same object rather than replacing it, which is what keeps the bind alive.
+        // this same object rather than replacing it, which is what keeps the bind
+        // alive.
         gauge.valueProperty().bind(data.read());
 
         // nothing polls a metric until a gauge actually asks for it.

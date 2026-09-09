@@ -8,7 +8,8 @@ import eu.hansolo.medusa.Gauge;
 
 /**
  * The gauges the user has added. Lives outside the controllers because every
- * scene swap builds a brand new PrimaryController, and the gauges have to survive that.
+ * scene swap builds a brand new PrimaryController, and the gauges have to
+ * survive that.
  */
 public class GaugeList {
     private static final List<Gauge> list = new ArrayList<>();

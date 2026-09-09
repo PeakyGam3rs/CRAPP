@@ -21,7 +21,8 @@ public class PrimaryController {
     private Button saveButton;
 
     /**
-     * Rebuilds the dashboard from GaugeList. Coming back from the picker throws this
+     * Rebuilds the dashboard from GaugeList. Coming back from the picker throws
+     * this
      * controller away and makes a new one, so the gauges get re-hung every time
      * rather than being created here.
      */

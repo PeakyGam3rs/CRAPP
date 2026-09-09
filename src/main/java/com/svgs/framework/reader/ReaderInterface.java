@@ -21,7 +21,8 @@ public class ReaderInterface {
     public static InputStream inputStream;
     public static OutputStream outputStream;
 
-    // need data declared + initialized at the start so data can be recorded properly as it runs.
+    // need data declared + initialized at the start so data can be recorded
+    // properly as it runs.
     public static final ArrayList<DataProperty> dataBucket = DataRegistry.createData();
 
     // the poller thread walks this while the FX thread adds to it, so it has to be
@@ -118,7 +119,8 @@ public class ReaderInterface {
     }
 
     /**
-     * One CSV row: timestamp first, then every metric in {@link DataRegistry} order.
+     * One CSV row: timestamp first, then every metric in {@link DataRegistry}
+     * order.
      * SaveViewer relies on that order to pick columns back out.
      */
     public static String getValueReadout() {
@@ -148,7 +150,7 @@ public class ReaderInterface {
         out.write((cmd + "\r").getBytes());
         out.flush();
 
-        StringBuilder response = new StringBuilder(); //found this thingy on google, but it's basically just a string
+        StringBuilder response = new StringBuilder(); // found this thingy on google, but it's basically just a string
         long end = System.currentTimeMillis() + 5000;
 
         while (System.currentTimeMillis() < end) {

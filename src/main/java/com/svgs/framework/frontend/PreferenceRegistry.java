@@ -7,7 +7,8 @@ import java.util.Map;
 import eu.hansolo.medusa.Gauge.SkinType;
 
 public class PreferenceRegistry {
-    // LinkedHashMap, not HashMap: the menu order and the save-file column order both
+    // LinkedHashMap, not HashMap: the menu order and the save-file column order
+    // both
     // read off this, so it has to stay in the order written below (which matches
     // DataRegistry). A plain HashMap orders by hash and silently reshuffles both.
     public static final Map<String, Preference> registry = createRegistry();
@@ -31,7 +32,10 @@ public class PreferenceRegistry {
         return p;
     }
 
-    /** Reverse lookup: display title ("Boost Pressure") back to value title ("boostValue"). */
+    /**
+     * Reverse lookup: display title ("Boost Pressure") back to value title
+     * ("boostValue").
+     */
     public static String getValueTitle(String gaugeTitle) {
         for (Map.Entry<String, Preference> entry : registry.entrySet()) {
             if (entry.getValue().getTitle().equals(gaugeTitle)) {

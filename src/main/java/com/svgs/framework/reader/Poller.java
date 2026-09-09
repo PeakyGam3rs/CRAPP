@@ -12,7 +12,8 @@ public class Poller {
 
     /**
      * Starts the poller if it isn't already going. This is idempotent because
-     * screens get rebuilt on every scene swap and would otherwise each spawn a thread.
+     * screens get rebuilt on every scene swap and would otherwise each spawn a
+     * thread.
      */
     public static synchronized void start() {
         if (running) {

@@ -66,7 +66,7 @@ public class Preference {
             return AppPreferences.MAX_VALUE;
         }
     }
-    
+
     public int getThreshold() {
         if (this.threshold != null) {
             return this.threshold;
@@ -138,7 +138,7 @@ public class Preference {
     public void setThresholdVisible(boolean t) {
         this.thresholdVisible = t;
     }
-    
+
     public void setValueVisible(boolean v) {
         this.valueVisible = v;
     }

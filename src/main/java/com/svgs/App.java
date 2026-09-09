@@ -2,6 +2,8 @@ package com.svgs;
 
 import java.io.IOException;
 
+import com.svgs.framework.reader.ReaderInterface;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,10 +22,14 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("mainScreen"));
         stage.setScene(scene);
+        stage.setOnCloseRequest(event -> ReaderInterface.stopobdRead());
         stage.show();
-        //ObdReader.startobdRead();
-        //SaveManager.startDrive();
-        //stage.setOnCloseRequest(event -> SaveManager.stopRecord());
+
+        // the UI still comes up with no adapter plugged in, gauges just sit at zero.
+        if (!ReaderInterface.startobdRead()) {
+            System.out.println("No OBD connection on " + ReaderInterface.PORT_NAME
+                    + " - gauges will stay at zero.");
+        }
     }
 
     static void setRoot(String fxml) throws IOException {

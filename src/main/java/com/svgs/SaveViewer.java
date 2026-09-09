@@ -13,6 +13,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.svgs.framework.app.DataProperty;
+import com.svgs.framework.frontend.PreferenceRegistry;
+import com.svgs.framework.reader.ReaderInterface;
+
 import eu.hansolo.fx.charts.Axis;
 import eu.hansolo.fx.charts.AxisType;
 import eu.hansolo.fx.charts.ChartType;
@@ -37,7 +41,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 public class SaveViewer{
-    private static final int[] csvColumns = {1, 3, 4, 5, 2, 6, 7, 8, 9};
     private static final DateTimeFormatter timeStuff = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     FileChooser fileChooser = new FileChooser();
@@ -63,12 +66,28 @@ public class SaveViewer{
     @FXML
     private VBox metricOptions;
 
+    /**
+     * Works out which CSV column holds a metric by asking DataRegistry where it sits.
+     * getValueReadout writes the row in that same order, so the two can't drift apart
+     * the way a hardcoded column list did.
+     */
+    private static int columnFor(String valueTitle) {
+        List<DataProperty> bucket = ReaderInterface.dataBucket;
+        for (int i = 0; i < bucket.size(); i++) {
+            if (bucket.get(i).getTitleProperty().equals(valueTitle)) {
+                return i + 1; // column 0 is the timestamp
+            }
+        }
+        throw new IllegalArgumentException("'" + valueTitle + "' is not recorded to CSV");
+    }
+
     @FXML
     void initialize() {
-        for (int i = 0; i < SecondaryController.getMetricNames().size(); i++) {
-            RadioButton button = new RadioButton(SecondaryController.getMetricNames().get(i));
+        for (String gaugeTitle : PreferenceRegistry.getPreferenceTitles()) {
+            RadioButton button = new RadioButton(gaugeTitle);
             button.setToggleGroup(poop);
-            button.setUserData(i);
+            // the value title, not a positional index, so the menu can be reordered freely
+            button.setUserData(PreferenceRegistry.getValueTitle(gaugeTitle));
             metricOptions.getChildren().add(button);
         }
 
@@ -102,9 +121,9 @@ public class SaveViewer{
             return;
         }
 
-        int metricIndex = (int) selectedToggle.getUserData();
+        String valueTitle = (String) selectedToggle.getUserData();
         try {
-            chartHolder.getChildren().setAll(buildChart(selectedFile.toPath(), metricIndex));
+            chartHolder.getChildren().setAll(buildChart(selectedFile.toPath(), valueTitle));
         } catch (Exception e) {
             chartHolder.getChildren().clear();
             System.out.println("Could not load save graph");
@@ -112,12 +131,13 @@ public class SaveViewer{
         }
     }
 
-    private XYChart<XYChartItem> buildChart(Path csvFile, int metricIndex) throws IOException {
-        List<XYChartItem> items = readChartItems(csvFile, metricIndex);
+    private XYChart<XYChartItem> buildChart(Path csvFile, String valueTitle) throws IOException {
+        String label = PreferenceRegistry.getPreference(valueTitle).getTitle();
+        List<XYChartItem> items = readChartItems(csvFile, columnFor(valueTitle));
         XYSeries<XYChartItem> series = new XYSeries<>(
             items,
             ChartType.LINE,
-            SecondaryController.getMetricNames().get(metricIndex),
+            label,
             Color.web("#31a6ff"),
             Color.web("#31a6ff"),
             false
@@ -132,26 +152,25 @@ public class SaveViewer{
         }
 
         Axis xAxis = new Axis(0, Math.max(maxX, 1), Orientation.HORIZONTAL, AxisType.LINEAR, Position.BOTTOM, "Time (seconds)");
-        Axis yAxis = new Axis(minY, maxY, Orientation.VERTICAL, AxisType.LINEAR, Position.LEFT, SecondaryController.getMetricNames().get(metricIndex));
+        Axis yAxis = new Axis(minY, maxY, Orientation.VERTICAL, AxisType.LINEAR, Position.LEFT, label);
         xAxis.setAutoScale(true);
         yAxis.setAutoScale(true);
 
         XYPane<XYChartItem> pane = new XYPane<>(series);
         Grid grid = new Grid(xAxis, yAxis);
         XYChart<XYChartItem> chart = new XYChart<>(pane, grid, xAxis, yAxis);
-        chart.setTitle(SecondaryController.getMetricNames().get(metricIndex));
+        chart.setTitle(label);
         chart.setSubTitle(selectedFile.getName());
         chart.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         return chart;
     }
 
-    private List<XYChartItem> readChartItems(Path csvFile, int metricIndex) throws IOException {
+    private List<XYChartItem> readChartItems(Path csvFile, int columnIndex) throws IOException {
         List<XYChartItem> items = new ArrayList<>();
-        int columnIndex = csvColumns[metricIndex];
         long firstTime = -1;
 
         try (BufferedReader reader = Files.newBufferedReader(csvFile)) {
-            String line = reader.readLine();
+            String line = reader.readLine(); // header row
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length <= columnIndex) {

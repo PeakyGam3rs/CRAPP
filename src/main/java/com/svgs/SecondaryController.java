@@ -31,7 +31,9 @@ public class SecondaryController {
 
   @FXML
   void doTheThing(ActionEvent event) {
-    if (parList.getSelectionModel().getSelectedItem() == null) {
+    String selected = parList.getSelectionModel().getSelectedItem();
+
+    if (selected == null) {
       Alert alert = new Alert(Alert.AlertType.WARNING);
       alert.setTitle("None Selected Warning");
       alert.setHeaderText("Select One! or not");
@@ -39,18 +41,16 @@ public class SecondaryController {
           "You haven't selected a gauge type yet. If you want to return without changes, press the return button.");
       alert.showAndWait();
       return;
-    } else {
-      int selected = parList.getSelectionModel().getSelectedIndex();
-
-      GaugeCreator.createGuage(parList.getSelectionModel().getSelectedItem());
-      try {
-        App.setRoot("mainScreen");
-      } catch (Exception e) {
-        System.out.println("doTheThing error");
-        System.out.println(e);
-      }
     }
 
+    GaugeCreator.createGauge(selected);
+
+    try {
+      App.setRoot("mainScreen");
+    } catch (Exception e) {
+      System.out.println("doTheThing error");
+      System.out.println(e);
+    }
   }
 
 }
